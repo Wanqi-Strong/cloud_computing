@@ -13,14 +13,18 @@ import {
 
 import { listAssignments } from './../../graphql/queries'
 
-import { createAssignment as  createAssignmentApi} from './../../graphql/mutations'
+import { createAssignment as createAssignmentApi } from './../../graphql/mutations'
 
-const AddAssignment = () => {
+const AddAssignment = (props) => {
     const [assignments, setAssignments] = useState([]);
 
     useEffect(() => {
         fetchAssignments();
     }, []);
+
+    function signOut() {
+        props.signOut();
+    }
 
     async function fetchAssignments() {
         const apiData = await API.graphql({ query: listAssignments });
@@ -36,7 +40,7 @@ const AddAssignment = () => {
             description: form.get("description"),
             start_date: form.get("start_date"),
             end_date: form.get("end_date"),
-            weightage: parseInt(form.get("weightage")),
+            weightage: parseFloat(form.get("weightage")),
             module: form.get("module"),
         };
         await API.graphql({
@@ -50,6 +54,7 @@ const AddAssignment = () => {
     return (
         <View className="App">
             <Heading level={1}>My Assignment Record</Heading>
+            <Button onClick={signOut}>sign out</Button>
             <View as="form" margin="3rem 0" onSubmit={createAssignment}>
                 <Flex direction="row" justifyContent="center">
                     <TextField
