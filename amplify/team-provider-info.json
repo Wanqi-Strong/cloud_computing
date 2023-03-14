@@ -14,6 +14,9 @@
     "categories": {
       "auth": {
         "cloudcomputing4d6f4b73": {}
+      },
+      "api": {
+        "cloudcomputing": {}
       }
     }
   }
