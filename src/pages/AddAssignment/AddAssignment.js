@@ -26,9 +26,21 @@ const AddAssignment = (props) => {
         props.signOut();
     }
 
+    function getDays(day1,day2){
+        return Math.floor((Date.parse(day2) - Date.parse(day1)) / 86400000);
+    }
+
+    function compareNumbers(a, b) {
+        return a.days - b.days;
+      }
+
     async function fetchAssignments() {
         const apiData = await API.graphql({ query: listAssignments });
         const assignmentsList = apiData.data.listAssignments.items;
+        assignmentsList.forEach(i=>{
+            i.days = getDays(i.start_date,i.end_date)
+        })
+        assignmentsList.sort(compareNumbers)
         setAssignments(assignmentsList);
     }
 
@@ -122,10 +134,13 @@ const AddAssignment = (props) => {
                         <Text as="strong" fontWeight={700}>
                             {assignment.name}
                         </Text>
+                        <Text as="strong" fontWeight={700} color={'red'}>
+                            {assignment.days+' days'}
+                        </Text>
                         <Text as="span">{assignment.description}</Text>
                         <Text as="span">{assignment.start_date}</Text>
                         <Text as="span">{assignment.end_date}</Text>
-                        <Text as="span">{assignment.weightage}</Text>
+                        <Text as="span">{assignment.weightage*100 +"%"}</Text>
                         <Text as="span">{assignment.module}</Text>
                     </Flex>
                 ))}
